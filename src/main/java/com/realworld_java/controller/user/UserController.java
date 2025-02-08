@@ -24,13 +24,11 @@ public class UserController {
 
     private final UserService userService;
     private final Logger logger;
-    private final Jwt jwt;
 
     @Autowired
-    public UserController(UserServiceImpl userService, Jwt jwt) {
+    public UserController(UserServiceImpl userService) {
         this.userService = userService;
         this.logger = LoggerFactory.getLogger(UserController.class);
-        this.jwt = jwt;
     }
 
     @PostMapping

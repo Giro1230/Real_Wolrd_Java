@@ -2,6 +2,7 @@ package com.realworld_java.service.user;
 
 import com.realworld_java.controller.user.req.*;
 import com.realworld_java.controller.user.res.*;
+import com.realworld_java.exception.user.InvalidCredentialsException;
 import com.realworld_java.security.jwt.Jwt;
 import com.realworld_java.domain.User;
 import com.realworld_java.repository.UserRepository;
@@ -48,17 +49,47 @@ public class UserServiceImpl implements UserService {
     @Override
     public LoginUserRes login(LoginUserReq data) {
         // getUserByEmail
-        User user = userRepository.findByEmail(data.getEmail()).orElseThrow();
-        return null;
+        final User user = userRepository.findByEmail(data.getEmail())
+                .orElseThrow(() -> new InvalidCredentialsException("Invalid email or password"));
+
+        // password match
+        if (!passwordEncoder.matches(data.getPassword(), user.getPassword())) {
+            throw new InvalidCredentialsException("Invalid email or password");
+        }
+
+        // token
+        final String token = jwt.generateToken(user);
+
+        return LoginUserRes.converter(user, token);
     }
 
     @Override
     public CurrentUserRes getCurrentUser(CurrentUserReq data) {
-        return null;
+        // getUserByEmail
+        final User user = userRepository.findByEmail(data.getEmail())
+                .orElseThrow(() -> new InvalidCredentialsException("Invalid email"));
+
+        // token
+        final String token = jwt.generateToken(user);
+
+        return CurrentUserRes.converter(user, token);
     }
 
     @Override
     public UpdatedUserRes update(String email, UpdateUserReq data) {
-        return null;
+        // getUserByEmail
+        final User user = userRepository.findByEmail(data.getEmail())
+                .orElseThrow(() -> new InvalidCredentialsException("Invalid email"));
+
+        // updatedUser
+        user.updated(email);
+        logger.info("updated user: {}", user);
+
+        userRepository.save(user);
+
+        // token
+        final String token = jwt.generateToken(user);
+
+        return UpdatedUserRes.converter(user, token);
     }
 }

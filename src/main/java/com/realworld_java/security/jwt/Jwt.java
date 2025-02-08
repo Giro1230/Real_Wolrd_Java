@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 @Component
 public class Jwt {
 
-//  private final Key key;
   private final SecretKey secretKey;
   private final long expirationTime;
 

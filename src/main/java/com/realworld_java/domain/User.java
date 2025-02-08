@@ -67,7 +67,7 @@ public class User {
       '}';
   }
 
-  public void updated(UpdateUserReq data){
-    this.email = data.getEmail();
+  public void updated(String email){
+    this.email = email;
   }
 }
