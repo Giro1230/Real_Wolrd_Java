@@ -1,6 +1,6 @@
 package com.realworld_java.security.jwt;
 
-import com.realworld_java.user.domain.User;
+import com.realworld_java.domain.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
