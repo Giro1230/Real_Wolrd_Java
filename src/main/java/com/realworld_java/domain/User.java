@@ -1,5 +1,6 @@
 package com.realworld_java.domain;
 
+import com.realworld_java.controller.user.req.UpdateUserReq;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Comment;
@@ -64,5 +65,9 @@ public class User {
       ", createdAt=" + createdAt +
       ", updatedAt=" + updatedAt +
       '}';
+  }
+
+  public void updated(UpdateUserReq data){
+    this.email = data.getEmail();
   }
 }

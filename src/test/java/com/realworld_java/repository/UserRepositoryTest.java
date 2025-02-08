@@ -1,5 +1,6 @@
 package com.realworld_java.repository;
 
+import com.realworld_java.controller.user.req.UpdateUserReq;
 import com.realworld_java.domain.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,5 +86,17 @@ class UserRepositoryTest {
 
         // when
         User savedUser = userRepository.save(user);
+        UpdateUserReq updateUser = UpdateUserReq.builder()
+                .email("update@example.com")
+                .build();
+
+        savedUser.updated(updateUser);
+        userRepository.save(savedUser);
+
+        Optional<User> findByEmailUser = userRepository.findByEmail(savedUser.getEmail());
+
+        // then
+        assertThat(findByEmailUser).isPresent();
+        assertThat(findByEmailUser.get().getEmail()).isEqualTo(savedUser.getEmail());
     }
 }
