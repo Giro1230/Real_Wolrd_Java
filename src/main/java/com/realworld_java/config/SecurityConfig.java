@@ -33,7 +33,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers( HttpMethod.GET,"/articles/**").permitAll()
-                        .requestMatchers( HttpMethod.POST,"/users/register", "/users/login").permitAll()
+                        .requestMatchers( HttpMethod.POST,"/users", "/users/login").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtFilter(jwt), UsernamePasswordAuthenticationFilter.class);

@@ -31,6 +31,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public RegisterUserRes register(RegisterUserReq data) {
+        // findByEmail
+        if (userRepository.findByEmail(data.getEmail()).isPresent())
+            throw new InvalidCredentialsException("Email already in use");
+
+        logger.info("user data : {}", data.getPassword());
+
         // password encode
         final String encodedPassword = passwordEncoder.encode(data.getPassword());
 
