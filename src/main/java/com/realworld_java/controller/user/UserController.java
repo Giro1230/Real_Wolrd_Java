@@ -2,8 +2,10 @@ package com.realworld_java.controller.user;
 
 import com.realworld_java.controller.user.req.CurrentUserReq;
 import com.realworld_java.controller.user.req.UpdateUserReq;
+import com.realworld_java.controller.user.req.UserReq;
 import com.realworld_java.controller.user.res.CurrentUserRes;
 import com.realworld_java.controller.user.res.UpdatedUserRes;
+import com.realworld_java.controller.user.res.UserRes;
 import com.realworld_java.service.user.UserServiceImpl;
 import com.realworld_java.service.user.inf.UserService;
 import org.slf4j.Logger;
@@ -29,16 +31,16 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<CurrentUserRes> getCurrentUser(@AuthenticationPrincipal CurrentUserReq user) {
+    public ResponseEntity<UserRes> getCurrentUser(@AuthenticationPrincipal UserReq user) {
         logger.info("Get current user: {}", user);
-        CurrentUserRes currentUserRes = userService.getCurrentUser(user);
-        return ResponseEntity.ok(currentUserRes);
+        UserRes userRes = userService.getCurrentUser(user);
+        return ResponseEntity.ok(userRes);
     }
 
     @PutMapping
-    public ResponseEntity<UpdatedUserRes> updateUser(@AuthenticationPrincipal String email, @RequestBody UpdateUserReq updateUserReq) {
-        logger.info("Update user: {}", updateUserReq);
-        UpdatedUserRes updatedUserRes = userService.update(email, updateUserReq);
-        return ResponseEntity.ok(updatedUserRes);
+    public ResponseEntity<UserRes> updateUser(@AuthenticationPrincipal String email, @RequestBody UserReq user) {
+        logger.info("Update user: {}", user);
+        UserRes userRes = userService.update(email, user);
+        return ResponseEntity.ok(userRes);
     }
 }

@@ -1,6 +1,7 @@
 package com.realworld_java.repository;
 
 import com.realworld_java.controller.user.req.UpdateUserReq;
+import com.realworld_java.controller.user.req.UserReq;
 import com.realworld_java.domain.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,11 +87,13 @@ class UserRepositoryTest {
 
         // when
         User savedUser = userRepository.save(user);
-        UpdateUserReq updateUser = UpdateUserReq.builder()
-                .email("update@example.com")
+        UserReq userReq = UserReq.builder()
+                .user(UserReq.UserReqDTO.builder()
+                        .email("update@example.com")
+                        .build())
                 .build();
 
-        savedUser.updated(updateUser);
+        savedUser.updated(userReq.getUser().getEmail());
         userRepository.save(savedUser);
 
         Optional<User> findByEmailUser = userRepository.findByEmail(savedUser.getEmail());

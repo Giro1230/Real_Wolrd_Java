@@ -30,61 +30,59 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public RegisterUserRes register(RegisterUserReq data) {
+    public UserRes register(UserReq data) {
         // findByEmail
-        if (userRepository.findByEmail(data.getEmail()).isPresent())
+        if (userRepository.findByEmail(data.getUser().getEmail()).isPresent())
             throw new InvalidCredentialsException("Email already in use");
 
-        logger.info("user data : {}", data.getPassword());
-
         // password encode
-        final String encodedPassword = passwordEncoder.encode(data.getPassword());
+        final String encodedPassword = passwordEncoder.encode(data.getUser().getPassword());
 
         // RegisterUserReq -> User
         final User user = User.builder()
-                .username(data.getUsername())
-                .email(data.getEmail())
+                .username(data.getUser().getUsername())
+                .email(data.getUser().getEmail())
                 .password(encodedPassword)
                 .build();
 
         final User savedUser = userRepository.save(user);
 
-        return RegisterUserRes.converter(savedUser, jwt.generateToken(savedUser));
+        return UserRes.fromUser(savedUser, jwt.generateToken(savedUser));
     }
 
     @Override
-    public LoginUserRes login(LoginUserReq data) {
+    public UserRes login(UserReq data) {
         // getUserByEmail
-        final User user = userRepository.findByEmail(data.getEmail())
+        final User user = userRepository.findByEmail(data.getUser().getEmail())
                 .orElseThrow(() -> new InvalidCredentialsException("Invalid email or password"));
 
         // password match
-        if (!passwordEncoder.matches(data.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(data.getUser().getPassword(), user.getPassword())) {
             throw new InvalidCredentialsException("Invalid email or password");
         }
 
         // token
         final String token = jwt.generateToken(user);
 
-        return LoginUserRes.converter(user, token);
+        return UserRes.fromUser(user, token);
     }
 
     @Override
-    public CurrentUserRes getCurrentUser(CurrentUserReq data) {
+    public UserRes getCurrentUser(UserReq data) {
         // getUserByEmail
-        final User user = userRepository.findByEmail(data.getEmail())
+        final User user = userRepository.findByEmail(data.getUser().getEmail())
                 .orElseThrow(() -> new InvalidCredentialsException("Invalid email"));
 
         // token
         final String token = jwt.generateToken(user);
 
-        return CurrentUserRes.converter(user, token);
+        return UserRes.fromUser(user, token);
     }
 
     @Override
-    public UpdatedUserRes update(String email, UpdateUserReq data) {
+    public UserRes update(String email, UserReq data) {
         // getUserByEmail
-        final User user = userRepository.findByEmail(data.getEmail())
+        final User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new InvalidCredentialsException("Invalid email"));
 
         // updatedUser
@@ -96,6 +94,6 @@ public class UserServiceImpl implements UserService {
         // token
         final String token = jwt.generateToken(user);
 
-        return UpdatedUserRes.converter(user, token);
+        return UserRes.fromUser(user, token);
     }
 }
