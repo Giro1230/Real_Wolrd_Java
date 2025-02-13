@@ -81,10 +81,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserRes update(Long userId, UserReq data) {
-        // getUserByEmail
-//        final User user = userRepository.findByEmail(email)
-//                .orElseThrow(() -> new InvalidCredentialsException("Invalid email"));
-
         // getUserById
         final User user = userRepository.findById(userId)
                 .orElseThrow(()-> new InvalidCredentialsException("Invalid user id"));

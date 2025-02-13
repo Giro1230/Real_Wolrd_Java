@@ -66,16 +66,10 @@ public class Jwt {
   public Authentication getAuthentication(String token) {
     Claims claims = parseToken(token);
 
-    String username = claims.getSubject();
-    // roles를 가져오되, null이거나 비어있으면 빈 리스트를 사용
-    List<String> roles = new ArrayList<>();
+    Long userId = Long.parseLong(claims.getSubject());
 
-    List<SimpleGrantedAuthority> authorities = roles.stream()
-      .map(SimpleGrantedAuthority::new)
-      .collect(Collectors.toList());
+    List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
-    UserDetails userDetails = new org.springframework.security.core.userdetails.User(username, "", authorities);
-
-    return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
+    return new UsernamePasswordAuthenticationToken(userId, "", authorities);
   }
 }

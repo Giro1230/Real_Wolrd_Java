@@ -2,7 +2,6 @@ package com.realworld_java.service.user;
 
 import com.realworld_java.controller.user.req.*;
 import com.realworld_java.controller.user.res.*;
-import com.realworld_java.domain.User;
 import com.realworld_java.service.user.inf.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,13 +52,13 @@ class UserServiceTest {
                 .build();
 
         // when
-        UserRes resUser = userService.register(userReq);
+        UserRes registerUser = userService.register(userReq);
         UserRes loginUserRes = userService.login(userReq);
 
         // then
         assertThat(loginUserRes).isNotNull();
         assertThat(loginUserRes.getUser().getToken()).isNotNull();
-        assertThat(loginUserRes.getUser().getEmail()).isEqualTo(resUser.getUser().getEmail());
+        assertThat(loginUserRes.getUser().getEmail()).isEqualTo(registerUser.getUser().getEmail());
     }
 
     @Test
@@ -74,39 +73,46 @@ class UserServiceTest {
                         .build())
                 .build();
 
-        UserRes resUser = userService.register(reqUser);
+        UserRes registerUser = userService.register(reqUser);
 
         // when
-        UserRes currentUserRes = userService.getCurrentUser(reqUser);
+        UserRes currentUserRes = userService.getCurrentUser(1L);
 
         // then
         assertThat(currentUserRes).isNotNull();
         assertThat(currentUserRes.getUser().getToken()).isNotNull();
-        assertThat(currentUserRes.getUser().getEmail()).isEqualTo(resUser.getUser().getEmail());
-        assertThat(currentUserRes.getUser().getUsername()).isEqualTo(resUser.getUser().getUsername());
+        assertThat(currentUserRes.getUser().getEmail()).isEqualTo(registerUser.getUser().getEmail());
+        assertThat(currentUserRes.getUser().getUsername()).isEqualTo(registerUser.getUser().getUsername());
     }
 
-//    @Test
-//    void update() {
-//        // given : save
-//        UserReq reqUser = UserReq
-//                .builder()
-//                .user(UserReq.UserReqDTO.builder()
-//                        .email("test@example.com")
-//                        .password("password123")
-//                        .username("testUser")
-//                        .build())
-//                .build();
-//
-//        UserRes resUser = userService.register(reqUser);
-//
-//        String updateUserEmail = "update@example.com";
-//
-//        // when
-//        UpdatedUserRes updatedUserRes = userService.update(resUser.getUser().getEmail(), updateUserEmail);
-//
-//        // then
-//        assertThat(updatedUserRes).isNotNull();
-//        assertThat(updatedUserRes.getEmail()).isEqualTo(updateUserEmail);
-//    }
+    @Test
+    void update() {
+        // given : save
+        UserReq reqUser = UserReq
+                .builder()
+                .user(UserReq.UserReqDTO.builder()
+                        .email("test@example.com")
+                        .password("password123")
+                        .username("testUser")
+                        .build())
+                .build();
+
+        UserRes registerUser = userService.register(reqUser);
+
+        String updateUserEmail = "update@example.com";
+
+        UserReq updateUser = UserReq.builder()
+                .user(UserReq.UserReqDTO.builder()
+                        .email(updateUserEmail)
+                        .build())
+                .build();
+
+        // when
+        UserRes updatedUserRes = userService.update(1L, updateUser);
+
+
+        // then
+        assertThat(updatedUserRes).isNotNull();
+        assertThat(updatedUserRes.getUser().getEmail()).isEqualTo(updateUserEmail);
+    }
 }

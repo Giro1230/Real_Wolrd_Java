@@ -1,6 +1,5 @@
 package com.realworld_java.controller.user;
 
-import com.realworld_java.controller.user.req.CurrentUserReq;
 import com.realworld_java.controller.user.req.UserReq;
 import com.realworld_java.controller.user.res.UserRes;
 import com.realworld_java.service.user.UserServiceImpl;
@@ -26,9 +25,9 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<UserRes> getCurrentUser(@AuthenticationPrincipal String userId) {
+    public ResponseEntity<UserRes> getCurrentUser(@AuthenticationPrincipal Long userId) {
         logger.info("Get current userId: {}", userId);
-        UserRes userRes = userService.getCurrentUser(Long.parseLong(userId));
+        UserRes userRes = userService.getCurrentUser(userId);
         return ResponseEntity.ok(userRes);
     }
 
