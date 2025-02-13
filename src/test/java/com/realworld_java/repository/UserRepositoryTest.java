@@ -1,6 +1,5 @@
 package com.realworld_java.repository;
 
-import com.realworld_java.controller.user.req.UpdateUserReq;
 import com.realworld_java.controller.user.req.UserReq;
 import com.realworld_java.domain.User;
 import org.junit.jupiter.api.Test;

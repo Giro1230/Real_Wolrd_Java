@@ -8,5 +8,18 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class CurrentUserReq {
-  private String email;
+    private CurrentUserReqDTO user;
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class CurrentUserReqDTO {
+        private Long userId;
+        private String username;
+        private String email;
+        private String bio;
+        private String image;
+    }
 }

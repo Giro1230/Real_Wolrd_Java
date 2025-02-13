@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 
         final User savedUser = userRepository.save(user);
 
-        return UserRes.fromUser(savedUser, jwt.generateToken(savedUser));
+        return converter(savedUser, jwt.generateToken(savedUser));
     }
 
     @Override
@@ -64,29 +64,33 @@ public class UserServiceImpl implements UserService {
         // token
         final String token = jwt.generateToken(user);
 
-        return UserRes.fromUser(user, token);
+        return converter(user, token);
     }
 
     @Override
-    public UserRes getCurrentUser(UserReq data) {
+    public UserRes getCurrentUser(Long userId) {
         // getUserByEmail
-        final User user = userRepository.findByEmail(data.getUser().getEmail())
-                .orElseThrow(() -> new InvalidCredentialsException("Invalid email"));
+        final User findUser = userRepository.findById(userId)
+                .orElseThrow(() -> new InvalidCredentialsException("Not Login"));
 
         // token
-        final String token = jwt.generateToken(user);
+        final String token = jwt.generateToken(findUser);
 
-        return UserRes.fromUser(user, token);
+        return converter(findUser, token);
     }
 
     @Override
-    public UserRes update(String email, UserReq data) {
+    public UserRes update(Long userId, UserReq data) {
         // getUserByEmail
-        final User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new InvalidCredentialsException("Invalid email"));
+//        final User user = userRepository.findByEmail(email)
+//                .orElseThrow(() -> new InvalidCredentialsException("Invalid email"));
+
+        // getUserById
+        final User user = userRepository.findById(userId)
+                .orElseThrow(()-> new InvalidCredentialsException("Invalid user id"));
 
         // updatedUser
-        user.updated(email);
+        user.updated(data.getUser().getEmail());
         logger.info("updated user: {}", user);
 
         userRepository.save(user);
@@ -94,6 +98,11 @@ public class UserServiceImpl implements UserService {
         // token
         final String token = jwt.generateToken(user);
 
+        return converter(user, token);
+    }
+
+    // User(Entity) -> UserRes(DTO)
+    public UserRes converter (User user, String token) {
         return UserRes.fromUser(user, token);
     }
 }

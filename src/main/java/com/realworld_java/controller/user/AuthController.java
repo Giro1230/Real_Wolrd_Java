@@ -1,10 +1,6 @@
 package com.realworld_java.controller.user;
 
-import com.realworld_java.controller.user.req.LoginUserReq;
-import com.realworld_java.controller.user.req.RegisterUserReq;
 import com.realworld_java.controller.user.req.UserReq;
-import com.realworld_java.controller.user.res.LoginUserRes;
-import com.realworld_java.controller.user.res.RegisterUserRes;
 import com.realworld_java.controller.user.res.UserRes;
 import com.realworld_java.service.user.UserServiceImpl;
 import com.realworld_java.service.user.inf.UserService;

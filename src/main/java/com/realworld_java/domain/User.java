@@ -1,6 +1,5 @@
 package com.realworld_java.domain;
 
-import com.realworld_java.controller.user.req.UpdateUserReq;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Comment;
