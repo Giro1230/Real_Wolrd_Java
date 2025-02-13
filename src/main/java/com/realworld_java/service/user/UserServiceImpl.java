@@ -5,7 +5,7 @@ import com.realworld_java.controller.user.res.*;
 import com.realworld_java.exception.user.InvalidCredentialsException;
 import com.realworld_java.security.jwt.Jwt;
 import com.realworld_java.domain.User;
-import com.realworld_java.repository.UserRepository;
+import com.realworld_java.repository.user.UserRepository;
 import com.realworld_java.service.user.inf.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package com.realworld_java.repository;
+package com.realworld_java.repository.user;
 
 import com.realworld_java.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
