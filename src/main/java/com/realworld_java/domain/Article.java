@@ -45,7 +45,12 @@ public class Article {
   private User user;
 
   @Comment("태그")
-  @OneToMany(mappedBy = "article", fetch = FetchType.LAZY)
+  @ManyToMany
+  @JoinTable(
+          name = "article_tag",
+          joinColumns = @JoinColumn(name = "article_id"),
+          inverseJoinColumns = @JoinColumn(name = "tag_id")
+  )
   private List<Tag> tags = new ArrayList<>();
 
   @Comment("댓글")

@@ -1,5 +1,6 @@
 package com.realworld_java.controller.article.req;
 
+import com.realworld_java.domain.Article;
 import lombok.*;
 
 import java.util.List;
@@ -9,15 +10,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CreatedArticleReq {
-    private CreatedArticleReqDTO article;
+public class ArticleAuthReq {
+    private ArticleAuthReqDTO article;
 
     @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    private static class CreatedArticleReqDTO {
+    public static class ArticleAuthReqDTO {
         private String title;
         private String description;
         private String body;

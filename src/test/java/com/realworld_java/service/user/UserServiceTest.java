@@ -114,5 +114,6 @@ class UserServiceTest {
         // then
         assertThat(updatedUserRes).isNotNull();
         assertThat(updatedUserRes.getUser().getEmail()).isEqualTo(updateUserEmail);
+        assertThat(updatedUserRes.getUser().getUsername()).isEqualTo(registerUser.getUser().getUsername());
     }
 }
