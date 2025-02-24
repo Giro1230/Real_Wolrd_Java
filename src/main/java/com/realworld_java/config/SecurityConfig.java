@@ -33,6 +33,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers( HttpMethod.GET,"/articles/**").permitAll()
+                        .requestMatchers( HttpMethod.GET,"/tags").permitAll()
                         .requestMatchers( HttpMethod.POST,"/users", "/users/login").permitAll()
                         .anyRequest().authenticated()
                 )

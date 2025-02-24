@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @Getter
@@ -27,17 +29,11 @@ public class Tag {
   @Column(nullable = false)
   private LocalDateTime createdAt;
 
-  @Comment("수정날짜")
-  @Column
-  private LocalDateTime updatedAt;
+  @ManyToMany(mappedBy = "tags")
+  private List<Article> articles = new ArrayList<>();
 
   @PrePersist
   protected void onCreate() {
     this.createdAt = LocalDateTime.now();
-  }
-
-  @PreUpdate
-  protected void onUpdate() {
-    this.updatedAt = LocalDateTime.now();
   }
 }

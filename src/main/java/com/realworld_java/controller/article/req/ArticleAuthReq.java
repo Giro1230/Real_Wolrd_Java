@@ -18,6 +18,6 @@ public class ArticleAuthReq {
         private String title;
         private String description;
         private String body;
-        private List<String> tags;
+        private List<String> tagList;
     }
 }
