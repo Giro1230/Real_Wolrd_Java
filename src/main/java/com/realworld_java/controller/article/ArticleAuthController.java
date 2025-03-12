@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/articles")
 public class ArticleAuthController {
 
-    private ArticleAuthService articleAuthService;
-    private Logger logger;
+    private final ArticleAuthService articleAuthService;
+    private final Logger logger;
 
     public ArticleAuthController(ArticleAuthService articleAuthService) {
         this.articleAuthService = articleAuthService;
@@ -25,9 +25,9 @@ public class ArticleAuthController {
     }
 
     @PostMapping
-    public ResponseEntity<ArticleAuthRes> created(@AuthenticationPrincipal Long userId, @RequestBody ArticleAuthReq articleAuthReq) {
+    public ResponseEntity<CreatedArticleAuthRes> created(@AuthenticationPrincipal Long userId, @RequestBody ArticleAuthReq articleAuthReq) {
         logger.info("Article Auth Created Call");
-        articleAuthService.createdArticleAuth(userId, articleAuthReq);
+//        CreatedArticleAuthRes createdArticleAuthRes = articleAuthService.createdArticleAuth(userId, articleAuthReq);
 
         return ResponseEntity.ok(null);
     }

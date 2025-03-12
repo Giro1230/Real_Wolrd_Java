@@ -2,9 +2,12 @@ package com.realworld_java.service.article;
 
 import com.realworld_java.controller.article.req.ArticleAuthReq;
 import com.realworld_java.controller.article.res.ArticleAuthRes;
+import com.realworld_java.controller.article.res.CreatedArticleAuthRes;
 import com.realworld_java.domain.Article;
 import com.realworld_java.domain.Tag;
 import com.realworld_java.domain.User;
+import com.realworld_java.exception.CustomException;
+import com.realworld_java.exception.ErrorCode;
 import com.realworld_java.repository.article.ArticleAuthRepository;
 import com.realworld_java.repository.tag.TagRepository;
 import com.realworld_java.repository.user.UserRepository;
@@ -23,10 +26,10 @@ import java.util.stream.Stream;
 @Service
 public class ArticleAuthServiceImpl implements ArticleAuthService {
 
-    private ArticleAuthRepository articleRepository;
-    private UserRepository userRepository;
-    private TagRepository tagRepository;
-    private Logger logger;
+    private final ArticleAuthRepository articleRepository;
+    private final UserRepository userRepository;
+    private final TagRepository tagRepository;
+    private final Logger logger;
 
     public ArticleAuthServiceImpl(ArticleAuthRepository articleRepository, UserRepository userRepository, TagRepository tagRepository) {
         this.articleRepository = articleRepository;
@@ -36,10 +39,11 @@ public class ArticleAuthServiceImpl implements ArticleAuthService {
     }
 
     @Override
-    public ArticleAuthRes createdArticleAuth(Long userId, ArticleAuthReq articleAuthReq) {
+    public CreatedArticleAuthRes createdArticleAuth(Long userId, ArticleAuthReq articleAuthReq) {
         logger.info("article auth req: {}", articleAuthReq);
 
-        User findUser = userRepository.findById(userId).orElseThrow();
+        User findUser = userRepository.findById(userId)
+                .orElseThrow( () -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         List<String> tagNames = articleAuthReq.getArticle().getTagList();
 
@@ -74,9 +78,9 @@ public class ArticleAuthServiceImpl implements ArticleAuthService {
                 .tags(finalTags)
                 .build();
 
-        articleRepository.save(article);
+        Article savedArticle = articleRepository.save(article);
 
-        return null;
+        return CreatedArticleAuthRes.fromArticle(savedArticle);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.realworld_java.controller.article.req;
 
-import com.realworld_java.domain.Article;
 import lombok.*;
 
 import java.util.List;

@@ -2,7 +2,8 @@ package com.realworld_java.service.user;
 
 import com.realworld_java.controller.user.req.*;
 import com.realworld_java.controller.user.res.*;
-import com.realworld_java.exception.user.InvalidCredentialsException;
+import com.realworld_java.exception.CustomException;
+import com.realworld_java.exception.ErrorCode;
 import com.realworld_java.security.jwt.Jwt;
 import com.realworld_java.domain.User;
 import com.realworld_java.repository.user.UserRepository;
@@ -33,7 +34,7 @@ public class UserServiceImpl implements UserService {
     public UserRes register(UserReq data) {
         // findByEmail
         if (userRepository.findByEmail(data.getUser().getEmail()).isPresent())
-            throw new InvalidCredentialsException("Email already in use");
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
 
         // password encode
         final String encodedPassword = passwordEncoder.encode(data.getUser().getPassword());
@@ -54,11 +55,11 @@ public class UserServiceImpl implements UserService {
     public UserRes login(UserReq data) {
         // getUserByEmail
         final User user = userRepository.findByEmail(data.getUser().getEmail())
-                .orElseThrow(() -> new InvalidCredentialsException("Invalid email or password"));
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_CREDENTIALS));
 
         // password match
         if (!passwordEncoder.matches(data.getUser().getPassword(), user.getPassword())) {
-            throw new InvalidCredentialsException("Invalid email or password");
+            throw new CustomException(ErrorCode.INVALID_CREDENTIALS);
         }
 
         // token
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
     public UserRes getCurrentUser(Long userId) {
         // getUserByEmail
         final User findUser = userRepository.findById(userId)
-                .orElseThrow(() -> new InvalidCredentialsException("Not Login"));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // token
         final String token = jwt.generateToken(findUser);
@@ -83,7 +84,7 @@ public class UserServiceImpl implements UserService {
     public UserRes update(Long userId, UserReq data) {
         // getUserById
         final User user = userRepository.findById(userId)
-                .orElseThrow(()-> new InvalidCredentialsException("Invalid user id"));
+                .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // updatedUser
         user.updated(data.getUser().getEmail());
